@@ -2,7 +2,7 @@
 
 [![GoDoc Widget](https://godoc.org/github.com/go-courier/codegen?status.svg)](https://godoc.org/github.com/go-courier/codegen)
 [![Build Status](https://travis-ci.org/go-courier/codegen.svg?branch=master)](https://travis-ci.org/go-courier/codegen)
-[![Coverage Status](https://coveralls.io/repos/github/go-courier/codegen/badge.svg?branch=master)](https://coveralls.io/github/go-courier/codegen?branch=master)
+[![codecov](https://codecov.io/gh/go-courier/codegen/branch/master/graph/badge.svg)](https://codecov.io/gh/go-courier/codegen)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-courier/codegen)](https://goreportcard.com/report/github.com/go-courier/codegen)
 
 Helpers fo generating go codes
