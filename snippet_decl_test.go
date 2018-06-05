@@ -54,11 +54,12 @@ func TestDeclType(t *testing.T) {
 	))
 
 	tt.Equal(`type (
+// test
 M = time.Time
 N = time.Time
 )`, Stringify(
 		DeclType(
-			Var(Type("time.Time"), "M").AsAlias(),
+			Var(Type("time.Time"), "M").AsAlias().WithComments("test"),
 			Var(Type("time.Time"), "N").AsAlias(),
 		),
 	))

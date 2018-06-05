@@ -80,10 +80,16 @@ type SnippetField struct {
 	Names []*SnippetIdent
 	Tag   string
 	Alias bool
+	SnippetComments
 }
 
 func (f SnippetField) AsAlias() *SnippetField {
 	f.Alias = true
+	return &f
+}
+
+func (f SnippetField) WithComments(comments ...string) *SnippetField {
+	f.SnippetComments = Comments(comments...)
 	return &f
 }
 
@@ -118,6 +124,10 @@ func (f SnippetField) WithoutTag() *SnippetField {
 
 func (f *SnippetField) Bytes() []byte {
 	buf := &bytes.Buffer{}
+
+	if f.SnippetComments != nil {
+		buf.Write(f.SnippetComments.Bytes())
+	}
 
 	for i := range f.Names {
 		if i > 0 {

@@ -108,7 +108,7 @@ func (file *File) importAliaser(importPath string) string {
 }
 
 func (file *File) Use(importPath string, exposedName string) string {
-	return file.imports[file.importAliaser(importPath)] + "." + exposedName
+	return file.importAliaser(importPath) + "." + exposedName
 }
 
 func deVendor(importPath string) string {

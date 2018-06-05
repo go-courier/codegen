@@ -54,26 +54,22 @@ const (
 	Fallthrough SnippetBuiltIn = "fallthrough"
 )
 
-func Comments(lines ...string) *SnippetComments {
+func Comments(lines ...string) SnippetComments {
 	finalLines := make([]string, 0)
 	for _, line := range lines {
 		if line != "" {
 			finalLines = append(finalLines, strings.Split(line, "\n")...)
 		}
 	}
-	return &SnippetComments{
-		Lines: finalLines,
-	}
+	return SnippetComments(finalLines)
 }
 
-type SnippetComments struct {
-	Lines []string
-}
+type SnippetComments []string
 
-func (comments *SnippetComments) Bytes() []byte {
+func (comments SnippetComments) Bytes() []byte {
 	buf := &bytes.Buffer{}
 
-	for _, n := range comments.Lines {
+	for _, n := range comments {
 		buf.WriteString("// ")
 		buf.WriteString(n)
 		buf.WriteRune('\n')
