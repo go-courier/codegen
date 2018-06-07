@@ -102,6 +102,7 @@ func Type(name string) *NamedType {
 
 type NamedType struct {
 	SnippetType
+	SnippetCanBeInterfaceMethod
 	SnippetCanAddr
 	Name *SnippetIdent
 }
@@ -118,6 +119,7 @@ func Func(params ...*SnippetField) *FuncType {
 
 type FuncType struct {
 	SnippetType
+	SnippetCanBeInterfaceMethod
 	Name    *SnippetIdent
 	Recv    *SnippetField
 	Params  []*SnippetField
@@ -233,15 +235,19 @@ func (tpe *StructType) Bytes() []byte {
 	return buf.Bytes()
 }
 
-func Interface(methods ...*FuncType) *InterfaceType {
+func Interface(methods ...SnippetCanBeInterfaceMethod) *InterfaceType {
 	return &InterfaceType{
 		Methods: methods,
 	}
 }
 
+type SnippetCanBeInterfaceMethod interface {
+	canBeInterfaceMethod()
+}
+
 type InterfaceType struct {
 	SnippetType
-	Methods []*FuncType
+	Methods []SnippetCanBeInterfaceMethod
 }
 
 func (tpe *InterfaceType) Bytes() []byte {
@@ -253,7 +259,13 @@ func (tpe *InterfaceType) Bytes() []byte {
 		if i == 0 {
 			buf.WriteRune('\n')
 		}
-		buf.Write(tpe.Methods[i].withoutFuncToken().Bytes())
+		methodType := tpe.Methods[i]
+		switch methodType.(type) {
+		case *FuncType:
+			buf.Write(methodType.(*FuncType).withoutFuncToken().Bytes())
+		case *NamedType:
+			buf.Write(methodType.(*NamedType).Bytes())
+		}
 		buf.WriteRune('\n')
 	}
 
