@@ -1,23 +1,32 @@
 package codegen
 
 import (
-	"reflect"
-	"testing"
+	"fmt"
 )
 
-func TestHello(t *testing.T) {
+func ExampleNewFile_hello() {
 	file := NewFile("main", "examples/hello/hello_test.go")
 
 	file.WriteBlock(
-		Func(Var(file.TypeOf(reflect.TypeOf(t)))).Named("Test").Do(
+		Func().Named("main").Do(
 			Call(file.Use("fmt", "Println"), file.Val("Hello, 世界")),
 		),
 	)
 
-	file.WriteFile()
+	fmt.Println(string(file.Bytes()))
+	// Output:
+	//package main
+	//
+	//import (
+	//	fmt "fmt"
+	//)
+	//
+	//func main() {
+	//	fmt.Println("Hello, 世界")
+	//}
 }
 
-func TestRangeAndClose(t *testing.T) {
+func ExampleNewFile_main() {
 	file := NewFile("main", "examples/range-and-close/range-and-close.go")
 
 	file.WriteBlock(
@@ -38,5 +47,27 @@ func TestRangeAndClose(t *testing.T) {
 		),
 	)
 
-	file.WriteFile()
+	fmt.Println(string(file.Bytes()))
+	// Output:
+	//package main
+	//
+	//import (
+	//	fmt "fmt"
+	//)
+	//
+	//func fibonacci(n int, c chan int) {
+	//	x, y := 0, 1
+	//	for i := 0; i < n; i++ {
+	//		c <- x
+	//		x, y = y, x+y
+	//	}
+	//	close(c)
+	//}
+	//func main() {
+	//	c := make(chan int, 10)
+	//	go fibonacci(cap(c), c)
+	//	for i := range c {
+	//		fmt.Println(i)
+	//	}
+	//}
 }
