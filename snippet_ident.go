@@ -266,10 +266,18 @@ func splitToWords(s string) (entries []string) {
 	}
 
 	// construct []string from results
-	//
-	for _, s := range runes {
-		if len(s) > 0 && (unicode.IsDigit(s[0]) || unicode.IsLetter(s[0])) {
-			entries = append(entries, string(s))
+	for i, s := range runes {
+		if len(s) > 0 {
+			if unicode.IsDigit(s[0]) {
+				if i > 0 {
+					entries[len(entries)-1] += string(s)
+				} else {
+					entries = append(entries, string(s))
+				}
+			}
+			if unicode.IsLetter(s[0]) {
+				entries = append(entries, string(s))
+			}
 		}
 	}
 
