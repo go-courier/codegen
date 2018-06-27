@@ -8,6 +8,26 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestGeneratedFileSuffix(t *testing.T) {
+	cases := []struct {
+		from string
+		to   string
+	}{
+		{
+			"./main.go",
+			"./main__generated.go",
+		},
+		{
+			"./main_test.go",
+			"./main__generated_test.go",
+		},
+	}
+
+	for _, c := range cases {
+		assert.Equal(t, GeneratedFileSuffix(c.from), c.to)
+	}
+}
+
 func TestIsEmptyValue(t *testing.T) {
 	tt := assert.New(t)
 

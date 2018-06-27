@@ -2,8 +2,32 @@ package codegen
 
 import (
 	"fmt"
+	"path/filepath"
 	"reflect"
+	"strings"
 )
+
+func IsGoFile(filename string) bool {
+	return filepath.Ext(filename) == ".go"
+}
+
+func IsGoTestFile(filename string) bool {
+	return strings.HasSuffix(filepath.Base(filename), "_test.go")
+}
+
+func GeneratedFileSuffix(filename string) string {
+	dir := filepath.Dir(filename)
+	base := filepath.Base(filename)
+	ext := filepath.Ext(filename)
+
+	if IsGoFile(filename) && IsGoTestFile(filename) {
+		base = strings.Replace(base, "_test.go", "__generated_test.go", -1)
+	} else {
+		base = strings.Replace(base, ext, fmt.Sprintf("__generated%s", ext), -1)
+
+	}
+	return fmt.Sprintf("%s/%s", dir, base)
+}
 
 func IsEmptyValue(rv reflect.Value) bool {
 	if rv.IsValid() && rv.CanInterface() {

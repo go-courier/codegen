@@ -3,6 +3,7 @@ package codegen
 import (
 	"bytes"
 	"fmt"
+	"go/build"
 	"go/format"
 	"go/parser"
 	"go/token"
@@ -12,7 +13,6 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"go/build"
 )
 
 func NewFile(pkgName string, filename string) *File {
