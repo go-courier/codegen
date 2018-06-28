@@ -63,6 +63,7 @@ func ExampleNewFile_main() {
 	//	}
 	//	close(c)
 	//}
+	//
 	//func main() {
 	//	c := make(chan int, 10)
 	//	go fibonacci(cap(c), c)

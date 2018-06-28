@@ -32,7 +32,7 @@ type File struct {
 func (file *File) WriteBlock(ss ...Snippet) {
 	for _, s := range ss {
 		file.Write(s.Bytes())
-		file.WriteByte('\n')
+		file.WriteString("\n\n")
 	}
 }
 
