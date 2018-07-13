@@ -13,6 +13,7 @@ import (
 )
 
 func SortImportsProcess(fset *token.FileSet, f *ast.File, filename string) error {
+	ast.SortImports(fset, f)
 	dir := path.Dir(filename)
 
 	for _, decl := range f.Decls {
@@ -34,8 +35,6 @@ func SortImportsProcess(fset *token.FileSet, f *ast.File, filename string) error
 		*fset = *fileSet
 		*f = *file
 	}
-
-	ast.SortImports(fset, f)
 	return nil
 }
 
