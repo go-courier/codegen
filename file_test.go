@@ -18,7 +18,7 @@ func ExampleNewFile_hello() {
 	//package main
 	//
 	//import (
-	//	fmt "fmt"
+	//	"fmt"
 	//)
 	//
 	//func main() {
@@ -52,7 +52,7 @@ func ExampleNewFile_main() {
 	//package main
 	//
 	//import (
-	//	fmt "fmt"
+	//	"fmt"
 	//)
 	//
 	//func fibonacci(n int, c chan int) {

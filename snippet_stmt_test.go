@@ -4,11 +4,11 @@ import (
 	"go/token"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSnippet_SwitchStmt(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`switch os := runtime.GOOS; os {
 case "darwin", "darwin32":
@@ -51,7 +51,7 @@ i++
 }
 
 func TestSnippet_SelectStmt(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`select {
 case c <- x:
@@ -71,7 +71,7 @@ return
 }
 
 func TestSnippet_IfStmt(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`if i := 1; i == 1 {
 }`, Stringify(
@@ -96,7 +96,7 @@ i++
 }
 
 func TestSnippet_For(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`for i := 1; i < 10; i++ {
 }`, Stringify(
@@ -132,7 +132,7 @@ i++
 }
 
 func TestSnippet_AssignStmt(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`a = Fn("1")`, Stringify(
 		Assign(Id("a")).By(Call("Fn", Val("1"))),
@@ -152,7 +152,7 @@ func TestSnippet_AssignStmt(t *testing.T) {
 }
 
 func TestSnippet_ReturnStmt(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`return`, Stringify(
 		Return(),

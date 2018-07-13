@@ -3,18 +3,18 @@ package codegen
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSnippet_Star(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("*bool", Stringify(Star(Bool)))
 	tt.Equal("**bool", Stringify(Star(Star(Bool))))
 }
 
 func TestSnippet_Sel(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`fmt.Printf("1", 1, '1', true)`, Stringify(
 		Sel(
@@ -43,7 +43,7 @@ func TestSnippet_Sel(t *testing.T) {
 }
 
 func TestSnippet_Call(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`fn("1", 1, '1', true, &a)`, Stringify(
 		Call("fn", Val("1"), Val(1), Val('1'), Val(true), Unary(Id("a"))),
@@ -72,7 +72,7 @@ func TestSnippet_Call(t *testing.T) {
 }
 
 func TestSnippet_TypeAssert(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`a.(string)`, Stringify(
 		TypeAssert(

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGeneratedFileSuffix(t *testing.T) {
@@ -24,12 +24,12 @@ func TestGeneratedFileSuffix(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		assert.Equal(t, GeneratedFileSuffix(c.from), c.to)
+		require.Equal(t, GeneratedFileSuffix(c.from), c.to)
 	}
 }
 
 func TestIsEmptyValue(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	c := make(chan int)
 

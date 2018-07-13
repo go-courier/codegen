@@ -3,11 +3,11 @@ package codegen
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSnippetIdent(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("Test", Stringify(Id("Test")))
 
@@ -27,7 +27,7 @@ func TestSnippetIdent(t *testing.T) {
 }
 
 func TestSnippetIdent_Converts(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	id := Id("i_am_an_id")
 
@@ -38,7 +38,7 @@ func TestSnippetIdent_Converts(t *testing.T) {
 }
 
 func Test_splitToWords(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal([]string{}, splitToWords(""))
 	tt.Equal([]string{"lowercase"}, splitToWords("lowercase"))

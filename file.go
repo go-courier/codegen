@@ -2,17 +2,15 @@ package codegen
 
 import (
 	"bytes"
-	"fmt"
 	"go/build"
-	"go/format"
-	"go/parser"
-	"go/token"
 	"io"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/go-courier/codegen/formatx"
 )
 
 func NewFile(pkgName string, filename string) *File {
@@ -58,26 +56,7 @@ func (file *File) Bytes() []byte {
 
 	io.Copy(buf, &file.Buffer)
 
-	return Format(file.filename, buf.Bytes())
-}
-
-func Format(filename string, src []byte) []byte {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, filename, src, parser.ParseComments)
-	if err != nil {
-		for i, line := range bytes.Split(src, []byte("\n")) {
-			fmt.Printf("\t%d\t%s\n", i+1, line)
-		}
-		panic(fmt.Errorf("go codes parse failed: %s in %s", err.Error(), filename))
-	}
-	buf := &bytes.Buffer{}
-	if err := format.Node(buf, fileSet, file); err != nil {
-		for i, line := range bytes.Split(src, []byte("\n")) {
-			fmt.Printf("\t%d\t%s\n", i+1, line)
-		}
-		panic(fmt.Errorf("go codes format failed: %s in %s", err.Error(), filename))
-	}
-	return buf.Bytes()
+	return formatx.MustFormat(file.filename, buf.Bytes(), formatx.SortImportsProcess)
 }
 
 func (file *File) Expr(f string, args ...interface{}) SnippetExpr {

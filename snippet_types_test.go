@@ -5,11 +5,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSnippetTypeOf(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("*bytes.Buffer", Stringify(TypeOf(reflect.TypeOf(&bytes.Buffer{}))))
 	tt.Equal(`chan struct {
@@ -33,14 +33,14 @@ Name string `+"`"+`json:"name"`+"`"+`
 }
 
 func TestSnippetType(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("bool", Stringify(Bool))
 	tt.Equal("Name", Stringify(Type("Name")))
 }
 
 func TestSnippetType_ModifiedOrComposedTypes(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("map[bool]bool", Stringify(Map(Bool, Bool)))
 	tt.Equal("[]bool", Stringify(Slice(Bool)))
@@ -51,7 +51,7 @@ func TestSnippetType_ModifiedOrComposedTypes(t *testing.T) {
 }
 
 func TestSnippetType_InterfaceType(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("interface {}", Stringify(Interface()))
 	tt.Equal(`interface {
@@ -71,7 +71,7 @@ String() (string)
 }
 
 func TestSnippetType_FuncType(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("func ()", Stringify(Func()))
 
@@ -109,7 +109,7 @@ func TestSnippetType_FuncType(t *testing.T) {
 }
 
 func TestSnippetType_StructType(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`struct {
 Embed

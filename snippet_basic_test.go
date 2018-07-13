@@ -3,18 +3,18 @@ package codegen
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestExpr(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 	tt.Equal(`1 + 1`, Stringify(Expr("? + ?", 1, 1)))
 	tt.Equal(`"1" + "1"`, Stringify(Expr("? + ?", "1", "1")))
 	tt.Equal(`i++`, Stringify(Expr("?++", Id("i"))))
 }
 
 func TestComments(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 	tt.Equal(`// 123123
 // 123123
 `, Stringify(Comments("123123", "123123")))
@@ -22,7 +22,7 @@ func TestComments(t *testing.T) {
 
 func TestVal(t *testing.T) {
 
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Error(TryCatch(func() {
 		v := make(chan string)
@@ -93,7 +93,7 @@ nil,
 }
 
 func TestSnippet_Block(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`{
 a := Fn("1")

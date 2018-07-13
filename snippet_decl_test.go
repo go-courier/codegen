@@ -3,11 +3,11 @@ package codegen
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDeclConst(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`const a = "1"`, Stringify(
 		DeclConst(
@@ -29,7 +29,7 @@ c
 }
 
 func TestDeclVar(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal(`var a = Fn("1")`, Stringify(
 		DeclVar(
@@ -45,7 +45,7 @@ func TestDeclVar(t *testing.T) {
 }
 
 func TestDeclType(t *testing.T) {
-	tt := assert.New(t)
+	tt := require.New(t)
 
 	tt.Equal("type N string", Stringify(
 		DeclType(
