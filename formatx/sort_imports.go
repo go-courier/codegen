@@ -111,7 +111,7 @@ func (group *groupSet) register(importSpec *ast.ImportSpec, dir string) {
 	}
 
 	// local
-	if strings.Contains(dir, pkg.Dir) || strings.Contains(pkg.Dir, dir) {
+	if strings.HasPrefix(dir, pkg.Dir) || strings.HasPrefix(pkg.Dir, dir) {
 		appendTo(2)
 		return
 	}
