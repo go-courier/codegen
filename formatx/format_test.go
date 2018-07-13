@@ -6,10 +6,12 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"fmt"
 )
 
 func TestProcess(t *testing.T) {
 	cwd, _ := os.Getwd()
+	fmt.Println(path.Join(cwd, "format2_test.go"))
 
 	result, _ := Format(path.Join(cwd, "format2_test.go"), []byte( /* language=go */ `package formatx
 
@@ -26,7 +28,7 @@ func Test(t *testing.T) {
 }
 `), SortImportsProcess)
 
-	require.Equal(t /* language=go */, `package formatx
+	require.Equal(t /* language=go */ , `package formatx
 
 import (
 	"testing" // testing
