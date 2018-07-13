@@ -5,8 +5,8 @@ import (
 	"path"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"fmt"
+	"github.com/stretchr/testify/require"
 )
 
 func TestProcess(t *testing.T) {
@@ -28,7 +28,7 @@ func Test(t *testing.T) {
 }
 `), SortImportsProcess)
 
-	require.Equal(t /* language=go */ , `package formatx
+	require.Equal(t /* language=go */, `package formatx
 
 import (
 	"testing" // testing
