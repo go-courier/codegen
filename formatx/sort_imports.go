@@ -105,13 +105,13 @@ func (group *groupSet) register(importSpec *ast.ImportSpec, dir string) {
 	}
 
 	// std
-	if strings.HasPrefix(pkg.Dir, goroot) {
+	if strings.HasPrefix(strings.ToLower(pkg.Dir), strings.ToLower(goroot)) {
 		appendTo(0)
 		return
 	}
 
 	// local
-	if strings.HasPrefix(dir, pkg.Dir) || strings.HasPrefix(pkg.Dir, dir) {
+	if strings.HasPrefix(strings.ToLower(dir), strings.ToLower(pkg.Dir)) || strings.HasPrefix(strings.ToLower(pkg.Dir), strings.ToLower(dir)) {
 		appendTo(2)
 		return
 	}
