@@ -13,14 +13,14 @@ func TestSnippetTypeOf(t *testing.T) {
 
 	tt.Equal("*bytes.Buffer", Stringify(TypeOf(reflect.TypeOf(&bytes.Buffer{}))))
 	tt.Equal(`chan struct {
-Name string `+"`"+`json:"name"`+"`"+`
+Name string `+ "`"+ `json:"name"`+ "`"+ `
 }`, Stringify(TypeOf(reflect.TypeOf(make(chan struct {
 		Name string `json:"name"`
 	})))))
 
 	tt.Equal(`chan struct {
 bytes.Buffer
-Name string `+"`"+`json:"name"`+"`"+`
+Name string `+ "`"+ `json:"name"`+ "`"+ `
 }`, Stringify(TypeOf(reflect.TypeOf(make(chan struct {
 		bytes.Buffer
 		Name string `json:"name"`
@@ -92,9 +92,9 @@ func TestSnippetType_FuncType(t *testing.T) {
 			Var(String, "b"),
 		).
 			Return(
-				Var(String),
-				Var(Error),
-			).
+			Var(String),
+			Var(Error),
+		).
 			Named("Fn"),
 	))
 
@@ -113,11 +113,14 @@ func TestSnippetType_StructType(t *testing.T) {
 
 	tt.Equal(`struct {
 Embed
-Key bool `+"`"+`json:"key,omitempty"`+"`"+`
+Key bool `+ "`"+ `json:"key,omitempty" validate:"@string"`+ "`"+ `
 KeyA, KeyA1 bool
 }`, Stringify(Struct(
 		Var(Type("Embed")),
-		Var(Bool, "Key").WithTags(map[string][]string{"json": {"key", "omitempty"}}),
+		Var(Bool, "Key").WithTags(map[string][]string{
+			"json":     {"key", "omitempty"},
+			"validate": {"@string"},
+		}),
 		Var(Bool, "KeyA", "KeyA1"),
 	)))
 }

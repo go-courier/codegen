@@ -5,6 +5,7 @@ import (
 	"go/token"
 	"strconv"
 	"strings"
+	"sort"
 )
 
 type SnippetSpec interface {
@@ -100,10 +101,21 @@ func (f SnippetField) WithTag(tag string) *SnippetField {
 
 func (f SnippetField) WithTags(tags map[string][]string) *SnippetField {
 	buf := &bytes.Buffer{}
-	for tag, valueAndFlags := range tags {
+
+	tagNames := make([]string, 0)
+	for tag := range tags {
+		tagNames = append(tagNames, tag)
+	}
+	sort.Strings(tagNames)
+
+	for i, tag := range tagNames {
+		if i > 0 {
+			buf.WriteRune(' ')
+		}
+
 		values := make([]string, 0)
-		for i := range valueAndFlags {
-			v := valueAndFlags[i]
+		for j := range tags[tag] {
+			v := tags[tag][j]
 			if v != "" {
 				values = append(values, v)
 			}
