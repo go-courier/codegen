@@ -28,6 +28,9 @@ func (body Body) Bytes() []byte {
 	buf.WriteRune('{')
 
 	for _, stmt := range body {
+		if stmt == nil {
+			continue
+		}
 		buf.WriteRune('\n')
 		buf.Write(stmt.Bytes())
 	}
