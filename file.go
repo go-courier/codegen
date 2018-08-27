@@ -2,7 +2,6 @@ package codegen
 
 import (
 	"bytes"
-	"go/build"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,6 +10,8 @@ import (
 	"strings"
 
 	"github.com/go-courier/codegen/formatx"
+	"golang.org/x/tools/go/packages"
+	"fmt"
 )
 
 func NewFile(pkgName string, filename string) *File {
@@ -76,11 +77,14 @@ func (file *File) importAliaser(importPath string) string {
 		file.imports = map[string]string{}
 	}
 	if file.imports[importPath] == "" {
-		pkg, err := build.Import(importPath, "", build.ImportComment)
+		pkgs, err := packages.Load(nil, importPath)
 		if err != nil {
 			panic(err)
 		}
-		importPath = deVendor(pkg.ImportPath)
+		if len(pkgs) == 0 {
+			panic(fmt.Errorf("`%s` not found", importPath))
+		}
+		importPath = pkgs[0].PkgPath
 		file.imports[importPath] = LowerSnakeCase(importPath)
 	}
 	return file.imports[importPath]

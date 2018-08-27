@@ -2,7 +2,6 @@ package formatx
 
 import (
 	"os"
-	"os/exec"
 	"path"
 	"testing"
 
@@ -11,8 +10,6 @@ import (
 )
 
 func TestProcess(t *testing.T) {
-	exec.Command("go", "get", "github.com/davecgh/go-spew/spew").CombinedOutput()
-
 	cwd, _ := os.Getwd()
 	result, _ := Format(path.Join(cwd, "format2_test.go"), []byte( /* language=go */ `package formatx
 
@@ -31,7 +28,7 @@ func Test(t *testing.T) {
 
 	fmt.Println(string(result))
 
-	require.Equal(t /* language=go */ , `package formatx
+	require.Equal(t /* language=go */, `package formatx
 
 import (
 	"testing" // testing

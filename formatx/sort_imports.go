@@ -3,13 +3,14 @@ package formatx
 import (
 	"bytes"
 	"go/ast"
-	"go/build"
 	"go/format"
 	"go/token"
 	"path"
 	"runtime"
 	"strconv"
+	"golang.org/x/tools/go/packages"
 	"strings"
+	"path/filepath"
 )
 
 func SortImportsProcess(fset *token.FileSet, f *ast.File, filename string) error {
@@ -49,7 +50,7 @@ func formatNode(fileSet *token.FileSet, node ast.Node) []byte {
 type groupSet [4][]*dep
 
 type dep struct {
-	pkg        *build.Package
+	pkg        *packages.Package
 	importSpec *ast.ImportSpec
 }
 
@@ -91,7 +92,9 @@ var goroot = runtime.GOROOT()
 
 func (group *groupSet) register(importSpec *ast.ImportSpec, dir string) {
 	importPath, _ := strconv.Unquote(importSpec.Path.Value)
-	pkg, err := build.Import(importPath, "", build.ImportComment)
+	pkgs, err := packages.Load(nil, importPath)
+
+	pkg := pkgs[0]
 
 	appendTo := func(i int) {
 		group[i] = append(group[i], &dep{
@@ -99,19 +102,22 @@ func (group *groupSet) register(importSpec *ast.ImportSpec, dir string) {
 			importSpec: importSpec,
 		})
 	}
+
 	if err != nil {
 		appendTo(3)
 		return
 	}
 
+	importPkgDir := filepath.Dir(pkg.GoFiles[0])
+
 	// std
-	if strings.HasPrefix(strings.ToLower(pkg.Dir), strings.ToLower(goroot)) {
+	if strings.HasPrefix(strings.ToLower(importPkgDir), strings.ToLower(goroot)) {
 		appendTo(0)
 		return
 	}
 
 	// local
-	if strings.HasPrefix(strings.ToLower(dir), strings.ToLower(pkg.Dir)) || strings.HasPrefix(strings.ToLower(pkg.Dir), strings.ToLower(dir)) {
+	if strings.HasPrefix(strings.ToLower(dir), strings.ToLower(importPkgDir)) || strings.HasPrefix(strings.ToLower(importPkgDir), strings.ToLower(dir)) {
 		appendTo(2)
 		return
 	}
