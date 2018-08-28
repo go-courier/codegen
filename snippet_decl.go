@@ -3,9 +3,9 @@ package codegen
 import (
 	"bytes"
 	"go/token"
+	"sort"
 	"strconv"
 	"strings"
-	"sort"
 )
 
 type SnippetSpec interface {

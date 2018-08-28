@@ -2,6 +2,7 @@ package codegen
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,7 +12,6 @@ import (
 
 	"github.com/go-courier/codegen/formatx"
 	"golang.org/x/tools/go/packages"
-	"fmt"
 )
 
 func NewFile(pkgName string, filename string) *File {

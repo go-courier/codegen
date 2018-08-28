@@ -5,12 +5,12 @@ import (
 	"go/ast"
 	"go/format"
 	"go/token"
+	"io/ioutil"
 	"path"
+	"path/filepath"
 	"runtime"
 	"strconv"
-	"golang.org/x/tools/go/packages"
 	"strings"
-	"path/filepath"
 )
 
 func SortImportsProcess(fset *token.FileSet, f *ast.File, filename string) error {
@@ -50,7 +50,8 @@ func formatNode(fileSet *token.FileSet, node ast.Node) []byte {
 type groupSet [4][]*dep
 
 type dep struct {
-	pkg        *packages.Package
+	name       string
+	pkgPath    string
 	importSpec *ast.ImportSpec
 }
 
@@ -70,7 +71,7 @@ func (group *groupSet) Bytes() []byte {
 					buf.WriteRune('\n')
 				}
 			}
-			if importSpec.Name != nil && importSpec.Name.String() != d.pkg.Name {
+			if importSpec.Name != nil {
 				buf.WriteString(importSpec.Name.String())
 				buf.WriteRune(' ')
 			}
@@ -88,36 +89,48 @@ func (group *groupSet) Bytes() []byte {
 	return buf.Bytes()
 }
 
-var goroot = runtime.GOROOT()
+type stdLibSet map[string]bool
+
+func (s stdLibSet) read(dir string, prefix string) {
+	files, _ := ioutil.ReadDir(dir)
+
+	for _, f := range files {
+		if f.IsDir() {
+			importPath := f.Name()
+			if prefix != "" {
+				importPath = filepath.Join(prefix, f.Name())
+			}
+			s.read(filepath.Join(dir, f.Name()), importPath)
+			s[importPath] = true
+			continue
+		}
+	}
+}
+
+var stdLibs = func() map[string]bool {
+	set := stdLibSet{}
+	set.read(runtime.GOROOT()+"/src", "")
+	return set
+}()
 
 func (group *groupSet) register(importSpec *ast.ImportSpec, dir string) {
 	importPath, _ := strconv.Unquote(importSpec.Path.Value)
-	pkgs, err := packages.Load(nil, importPath)
-
-	pkg := pkgs[0]
 
 	appendTo := func(i int) {
 		group[i] = append(group[i], &dep{
-			pkg:        pkg,
+			pkgPath:    importPath,
 			importSpec: importSpec,
 		})
 	}
 
-	if err != nil {
-		appendTo(3)
-		return
-	}
-
-	importPkgDir := filepath.Dir(pkg.GoFiles[0])
-
 	// std
-	if strings.HasPrefix(strings.ToLower(importPkgDir), strings.ToLower(goroot)) {
+	if stdLibs[strings.ToLower(importPath)] {
 		appendTo(0)
 		return
 	}
 
 	// local
-	if strings.HasPrefix(strings.ToLower(dir), strings.ToLower(importPkgDir)) || strings.HasPrefix(strings.ToLower(importPkgDir), strings.ToLower(dir)) {
+	if strings.Index(strings.ToLower(dir), strings.ToLower(importPath)) > -1 {
 		appendTo(2)
 		return
 	}

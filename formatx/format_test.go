@@ -1,12 +1,12 @@
 package formatx
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"fmt"
 )
 
 func TestProcess(t *testing.T) {
@@ -15,14 +15,20 @@ func TestProcess(t *testing.T) {
 
 import (
 	"github.com/go-courier/codegen"
+	
+	"unicode"
+	
+	"unicode/utf8"
 
 	// spew
 	s "github.com/davecgh/go-spew/spew" 
-	testing "testing" // testing
+	"testing" // testing
 )
 
 func Test(t *testing.T) {
 	s.Dump(codegen.String)
+	s.Dump(unicode.Armenian)
+	s.Dump(utf8.DecodeLastRune)
 }
 `), SortImportsProcess)
 
@@ -32,6 +38,8 @@ func Test(t *testing.T) {
 
 import (
 	"testing" // testing
+	"unicode"
+	"unicode/utf8"
 
 	// spew
 	s "github.com/davecgh/go-spew/spew"
@@ -41,6 +49,8 @@ import (
 
 func Test(t *testing.T) {
 	s.Dump(codegen.String)
+	s.Dump(unicode.Armenian)
+	s.Dump(utf8.DecodeLastRune)
 }
 `, string(result))
 }
