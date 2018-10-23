@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -110,6 +111,9 @@ func createVal(aliaser ImportPathAliaser) func(v interface{}) Snippet {
 			for _, key := range rv.MapKeys() {
 				values = append(values, KeyValue(val(key.Interface()), val(rv.MapIndex(key).Interface())))
 			}
+			sort.Slice(values, func(i, j int) bool {
+				return string(values[i].(*SnippetKeyValueExpr).Key.Bytes()) < string(values[j].(*SnippetKeyValueExpr).Key.Bytes())
+			})
 			return Compose(typeof(tpe), values...)
 		case reflect.Slice, reflect.Array:
 			values := make([]Snippet, 0)

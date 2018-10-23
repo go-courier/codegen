@@ -88,8 +88,9 @@ nil,
 }`, Stringify(Val([2]interface{}{"1", nil})))
 
 	tt.Equal(`map[string]int{
-"1": 2,
-}`, Stringify(Val(map[string]int{"1": 2})))
+"1": 1,
+"2": 2,
+}`, Stringify(Val(map[string]int{"2": 2, "1": 1})))
 }
 
 func TestSnippet_Block(t *testing.T) {
